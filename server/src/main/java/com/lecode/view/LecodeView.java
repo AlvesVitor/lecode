@@ -105,6 +105,7 @@ public class LecodeView extends JFrame {
 
     private void createLayout(JComponent... arg) throws Exception {
         try {
+            
             var pane = getContentPane();
             var gl = new GroupLayout(pane);
             pane.setLayout(gl);
@@ -112,12 +113,10 @@ public class LecodeView extends JFrame {
             gl.setAutoCreateContainerGaps(true);
 
             gl.setHorizontalGroup(gl.createSequentialGroup()
-                    .addComponent(arg[0])
-            );
+                    .addComponent(arg[0]));
 
             gl.setVerticalGroup(gl.createSequentialGroup()
-                    .addComponent(arg[0])
-            );
+                    .addComponent(arg[0]));
 
         } catch (Exception e) {
             throw e;

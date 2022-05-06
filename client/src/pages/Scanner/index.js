@@ -30,21 +30,22 @@ export function Scanner({ route }) {
   const [scanner, setScanner] = useState(true);
   const [codes, setcodes] = useState([])
   const navigation = useNavigation();
+  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     audio.setVolume(1);
     audio.release();
   }, []);
 
-  async function handleBarCodeScanned({ data }) {
+  function handleBarCodeScanned({ data }) {
     setScanner(false)
     if (type === "barcode") {
-      await service.request(data, `${url}/code`, 'POST')
+      service.request(data, `${url}/code`, 'POST')
         .then(() => handleSucces(data)
         )
         .catch((e) => alert(e))
     } else {
-      await service.request("", `${data}/test`, 'GET')
+      service.request("", `${data}/test`, 'GET')
         .then(() => {
           setUrl(data)
           Alert.alert("Sucesso!", `Sincronizado em ${data}`, [
@@ -64,14 +65,15 @@ export function Scanner({ route }) {
   }
 
   async function handleSucces(data) {
-    // audio.play()
+    audio.play()
     let list = codes;
-    console.log(codes);
-    if(codes.length > 2){
+    console.log(codes.length);
+    if (codes.length > 4) {
       list.shift();
     }
     list.push(data)
     setcodes(list)
+    setRefresh(!refresh)
     setTimeout(() => {
       setScanner(true)
     }, ONE_SECOND * 2)
@@ -83,13 +85,13 @@ export function Scanner({ route }) {
         style={styles.cameraContainer}
         onRead={scanner ? handleBarCodeScanned : undefined}
         reactivate={true}
-        showMarker={false}
+        showMarker={true}
         bottomContent={
           <FlatList
             style={styles.list}
             showsHorizontalScrollIndicator={true}
             data={codes}
-            keyExtractor={item => item + codes.length}
+            keyExtractor={(item, index) => index}
             renderItem={({ item }) => <Text style={styles.code}>{item}</Text>}
           />
         }
@@ -123,7 +125,7 @@ export function Scanner({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
+
     backgroundColor: "#fff",
     alignItems: 'center',
     justifyContent: 'flex-start',
