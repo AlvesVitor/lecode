@@ -1,36 +1,33 @@
 import React, { useEffect } from "react";
-import { useState, useContext } from 'react';
-import { StyleSheet, View, FlatList, Text, Alert } from 'react-native';
+import { useState, useContext } from "react";
+import { StyleSheet, View, FlatList, Text, Alert } from "react-native";
 
 import service from "../../service";
-import { Context } from '../../context';
+import { Context } from "../../context";
 import { useNavigation } from "@react-navigation/native";
 
-import QRCodeScanner from 'react-native-qrcode-scanner';
-import Sound from 'react-native-sound';
+import QRCodeScanner from "react-native-qrcode-scanner";
+import Sound from "react-native-sound";
 
-import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import Icon from "react-native-vector-icons/dist/MaterialCommunityIcons";
 
 import MP3 from "../../assets/audio.mp3";
 
 const ONE_SECOND = 1000;
 
 export function Scanner({ route }) {
-  const audio = new Sound(
-    MP3,
-    error => {
-      if (error) {
-        console.log('failed to load the sound', error);
-        return;
-      }
-    },
-  );
+  const audio = new Sound(MP3, (error) => {
+    if (error) {
+      console.log("failed to load the sound", error);
+      return;
+    }
+  });
   const { type } = route.params;
   const { url, setUrl } = useContext(Context);
   const [scanner, setScanner] = useState(true);
-  const [codes, setcodes] = useState([])
+  const [codes, setcodes] = useState([]);
   const navigation = useNavigation();
-  const [refresh, setRefresh] = useState(false)
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     audio.setVolume(1);
@@ -38,45 +35,51 @@ export function Scanner({ route }) {
   }, []);
 
   function handleBarCodeScanned({ data }) {
-    setScanner(false)
+    setScanner(false);
     if (type === "barcode") {
-      service.request(data, `${url}/code`, 'POST')
-        .then(() => handleSucces(data)
-        )
-        .catch((e) => alert(e))
+      service
+        .request(data, `${url}/code`, "POST")
+        .then(() => handleSucces(data))
+        .catch((e) => alert(e));
     } else {
-      service.request("", `${data}/test`, 'GET')
+      service
+        .request("", `${data}/test`, "GET")
         .then(() => {
-          setUrl(data)
+          setUrl(data);
           Alert.alert("Sucesso!", `Sincronizado em ${data}`, [
             {
               text: "OK",
-              onPress: () => handleGoBack()
-            }
-          ])
+              onPress: () => handleGoBack(),
+            },
+          ]);
         })
-        .catch((e) => Alert.alert("Erro!", "Verifique se seus aparelhos estão conectados a mesma rede!"))
+        .catch((e) =>
+          Alert.alert(
+            "Erro!",
+            "Verifique se seus aparelhos estão conectados a mesma rede!"
+          )
+        );
     }
-  };
+  }
 
   function handleGoBack() {
-    navigation.goBack()
-    setScanner(true)
+    navigation.goBack();
+    setScanner(true);
   }
 
   async function handleSucces(data) {
-    audio.play()
+    audio.play();
     let list = codes;
     console.log(codes.length);
     if (codes.length > 4) {
       list.shift();
     }
-    list.push(data)
-    setcodes(list)
-    setRefresh(!refresh)
+    list.push(data);
+    setcodes(list);
+    setRefresh(!refresh);
     setTimeout(() => {
-      setScanner(true)
-    }, ONE_SECOND * 2)
+      setScanner(true);
+    }, ONE_SECOND * 2);
   }
 
   return (
@@ -96,28 +99,72 @@ export function Scanner({ route }) {
           />
         }
       />
-      {type === "barcode" ?
+      {type === "barcode" ? (
         <View style={styles.footer}>
           <View style={styles.areaIcon}>
-            <Icon style={styles.iconSync} name="cellphone" size={25} color="#3C4F76" />
-            <Icon style={styles.iconSync} name="arrow-right" size={25} color="#3C4F76" />
-            <Icon style={styles.iconSync} name="barcode" size={25} color="#3C4F76" />
+            <Icon
+              style={styles.iconSync}
+              name="cellphone"
+              size={25}
+              color="#3C4F76"
+            />
+            <Icon
+              style={styles.iconSync}
+              name="arrow-right"
+              size={25}
+              color="#3C4F76"
+            />
+            <Icon
+              style={styles.iconSync}
+              name="barcode"
+              size={25}
+              color="#3C4F76"
+            />
           </View>
-          <Text style={styles.label}>Aponte sua camera para o código de barras.</Text>
+          <Text style={styles.label}>
+            Aponte sua camera para o código de barras.
+          </Text>
         </View>
-        :
+      ) : (
         <View style={styles.footer}>
           <View style={styles.areaIcon}>
-            <Icon style={styles.iconSync} name="cellphone" size={25} color="#3C4F76" />
-            <Icon style={styles.iconSync} name="arrow-right" size={25} color="#3C4F76" />
-            <Icon style={styles.iconSync} name="laptop" size={25} color="#3C4F76" />
-            <Icon style={styles.iconSync} name="arrow-right" size={25} color="#3C4F76" />
-            <Icon style={styles.iconSync} name="qrcode-scan" size={25} color="#3C4F76" />
+            <Icon
+              style={styles.iconSync}
+              name="cellphone"
+              size={25}
+              color="#3C4F76"
+            />
+            <Icon
+              style={styles.iconSync}
+              name="arrow-right"
+              size={25}
+              color="#3C4F76"
+            />
+            <Icon
+              style={styles.iconSync}
+              name="laptop"
+              size={25}
+              color="#3C4F76"
+            />
+            <Icon
+              style={styles.iconSync}
+              name="arrow-right"
+              size={25}
+              color="#3C4F76"
+            />
+            <Icon
+              style={styles.iconSync}
+              name="qrcode-scan"
+              size={25}
+              color="#3C4F76"
+            />
           </View>
-          <Text style={styles.label}>Abra o sincronizador no Computador e aponte sua camera para vincular aplicativo.</Text>
+          <Text style={styles.label}>
+            Abra o sincronizador no Computador e aponte sua camera para vincular
+            aplicativo.
+          </Text>
         </View>
-      }
-
+      )}
     </View>
   );
 }
@@ -127,40 +174,39 @@ const styles = StyleSheet.create({
     flex: 1,
 
     backgroundColor: "#fff",
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   areaCam: {
-    flex: 1
+    flex: 1,
   },
   footer: {
     width: "100%",
     height: 100,
     backgroundColor: "#fff",
     paddingHorizontal: 10,
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    alignItems: "center",
+    justifyContent: "space-around",
   },
   code: {
-    color: '#fff',
+    color: "#fff",
     textAlign: "left",
-    fontSize: 8
+    fontSize: 8,
   },
   iconSync: {
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   areaIcon: {
     paddingBottom: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   label: {
-    textAlign: 'center'
+    textAlign: "center",
   },
   list: {
-    width: '100%',
-    paddingHorizontal: 10
-  }
-
+    width: "100%",
+    paddingHorizontal: 10,
+  },
 });
