@@ -5,8 +5,10 @@ O projeto consiste em um aplicativo que substitui a funcionalidade de um leitor 
 ## Layout da Aplicação
 
 <p align="left">
- <img alt="Interface da aplicação" src="./github/gif.gif" width=200 height="auto">
   <img alt="Interface da aplicação" src="./github/server.png" width=200 height="auto">
+  </p>
+  <p align="left">
+ <img alt="Interface da aplicação" src="./github/gif.gif" width=200 height="auto">
   </p>
 
   <p align="left">
