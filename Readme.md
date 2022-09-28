@@ -15,8 +15,7 @@ O projeto consiste em um aplicativo que substitui a funcionalidade de um leitor 
   <img alt="Interface da aplicação" src="./github/menu.jpeg" width=200 height="auto">
   <img alt="Interface da aplicação" src="./github/permission.jpeg" width=200 height="auto">
   <img alt="Interface da aplicação" src="./github/leitor.jpeg" width=200 height="auto">
-   <img alt="Interface da aplicação" src="./github/leitor02.jpeg" width=200 height="auto">
-    <img alt="Interface da aplicação" src="./github/leitor03.jpeg" width=200 height="auto">
+  
   
 </p>
 
